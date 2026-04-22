@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FIFA Dünya Kupası 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;600;700&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #C9A84C;
+  --gold2: #E8C96A;
+  --dark: #0A0E1A;
+  --dark2: #111827;
+  --dark3: #1a2235;
+  --blue: #1E40AF;
+  --blue2: #3B82F6;
+  --text: #E2E8F0;
+  --muted: #94A3B8;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Barlow',sans-serif; background:var(--dark); color:var(--text); min-height:100vh; overflow-x:hidden; }
+
+/* ── COUNTDOWN BAR ── */
+#countdownBar {
+  width:100%;
+  background:#0d1320;
+  border-bottom:2px solid var(--gold);
+  padding:12px 16px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+}
+.cb-label {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:11px;
+  letter-spacing:3px;
+  color:var(--gold);
+  text-transform:uppercase;
+}
+.cb-units {
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.cb-box {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:3px;
+}
+.cb-num {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:32px;
+  line-height:1;
+  color:#fff;
+  background:rgba(255,255,255,0.1);
+  border-radius:6px;
+  padding:4px 10px;
+  min-width:52px;
+  text-align:center;
+}
+.cb-lbl {
+  font-size:9px;
+  letter-spacing:2px;
+  color:var(--muted);
+  text-transform:uppercase;
+}
+.cb-sep {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:28px;
+  color:var(--gold);
+  padding-bottom:16px;
+}
+.cb-match {
+  font-size:12px;
+  color:var(--muted);
+  font-weight:600;
+  text-align:center;
+}
+
+/* ── HERO ── */
+.hero {
+  background:linear-gradient(135deg,#0A0E1A 0%,#111827 50%,#1a2235 100%);
+  border-bottom:1px solid rgba(201,168,76,0.3);
+  padding:36px 20px 28px;
+  position:relative;
+  overflow:hidden;
+}
+.hero::before {
+  content:'';
+  position:absolute;
+  inset:0;
+  background:radial-gradient(ellipse at 80% 50%,rgba(30,64,175,0.15) 0%,transparent 70%);
+  pointer-events:none;
+}
+.hero-badge {
+  display:inline-block;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  color:#000;
+  font-family:'Bebas Neue',sans-serif;
+  font-size:12px;
+  letter-spacing:3px;
+  padding:5px 14px;
+  border-radius:2px;
+  margin-bottom:10px;
+  position:relative;
+}
+.hero h1 {
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(56px,14vw,96px);
+  line-height:0.9;
+  letter-spacing:2px;
+  background:linear-gradient(180deg,#fff 0%,var(--gold2) 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+  position:relative;
+}
+.hero-sub {
+  font-size:14px;
+  color:var(--muted);
+  font-weight:300;
+  margin-top:8px;
+  position:relative;
+}
+.hero-stats {
+  display:flex;
+  gap:24px;
+  margin-top:20px;
+  position:relative;
+}
+.stat-item { text-align:center; }
+.stat-num { font-family:'Bebas Neue',sans-serif; font-size:32px; color:var(--gold); line-height:1; }
+.stat-lbl { font-size:10px; letter-spacing:1.5px; color:var(--muted); text-transform:uppercase; }
+
+/* ── NAV ── */
+.nav-tabs {
+  background:var(--dark2);
+  border-bottom:1px solid rgba(255,255,255,0.06);
+  position:sticky;
+  top:0;
+  z-index:100;
+}
+.nav-inner { display:flex; overflow-x:auto; scrollbar-width:none; }
+.nav-inner::-webkit-scrollbar { display:none; }
+.tab-btn {
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:1.5px;
+  text-transform:uppercase;
+  color:var(--muted);
+  padding:14px 20px;
+  border:none;
+  background:none;
+  cursor:pointer;
+  border-bottom:3px solid transparent;
+  transition:all 0.2s;
+  white-space:nowrap;
+  flex-shrink:0;
+}
+.tab-btn:hover { color:var(--text); }
+.tab-btn.active { color:var(--gold); border-bottom-color:var(--gold); }
+
+/* ── MAIN ── */
+.main { max-width:1000px; margin:0 auto; padding:24px 16px; }
+.section { display:none; }
+.section.active { display:block; }
+.section-title { font-family:'Bebas Neue',sans-serif; font-size:32px; letter-spacing:2px; margin-bottom:4px; }
+.section-sub { font-size:12px; color:var(--muted); margin-bottom:20px; }
+
+/* ── INFO BANNER ── */
+.info-banner {
+  background:rgba(30,64,175,0.15);
+  border:1px solid rgba(59,130,246,0.3);
+  border-radius:8px;
+  padding:12px 16px;
+  margin-bottom:20px;
+  font-size:13px;
+  line-height:1.6;
+}
+
+/* ── GROUPS ── */
+.groups-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(240px,1fr)); gap:14px; }
+.group-card { background:var(--dark2); border:1px solid rgba(255,255,255,0.07); border-radius:8px; overflow:hidden; transition:border-color 0.2s,transform 0.2s; }
+.group-card:hover { border-color:rgba(201,168,76,0.35); transform:translateY(-2px); }
+.group-header { background:linear-gradient(135deg,var(--blue),#1e3a8a); padding:10px 14px; display:flex; align-items:center; gap:10px; }
+.group-letter { font-family:'Bebas Neue',sans-serif; font-size:30px; color:var(--gold); line-height:1; }
+.group-title { font-size:11px; letter-spacing:2px; color:rgba(255,255,255,0.55); text-transform:uppercase; }
+.team-row { display:flex; align-items:center; gap:10px; padding:8px 14px; border-bottom:1px solid rgba(255,255,255,0.04); transition:background 0.15s; }
+.team-row:last-child { border-bottom:none; }
+.team-row:hover { background:rgba(255,255,255,0.03); }
+.team-flag { font-size:20px; line-height:1; }
+.team-name { font-size:13px; font-weight:600; flex:1; }
+.team-conf { font-size:10px; color:var(--muted); background:rgba(255,255,255,0.06); padding:2px 6px; border-radius:3px; }
+.host-tag { font-size:9px; background:linear-gradient(135deg,var(--gold),var(--gold2)); color:#000; padding:2px 6px; border-radius:3px; font-weight:700; }
+
+/* ── FIXTURE ── */
+.fixture-filters { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:16px; }
+.filter-btn { font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; padding:5px 12px; border:1px solid rgba(255,255,255,0.12); border-radius:20px; background:none; color:var(--muted); cursor:pointer; transition:all 0.2s; }
+.filter-btn:hover,.filter-btn.active { border-color:var(--gold); color:var(--gold); background:rgba(201,168,76,0.08); }
+.fixture-day { margin-bottom:20px; }
+.day-label { font-family:'Barlow Condensed',sans-serif; font-size:11px; font-weight:700; letter-spacing:3px; text-transform:uppercase; color:var(--gold); padding:6px 0; border-bottom:1px solid rgba(201,168,76,0.2); margin-bottom:10px; }
+.match-card { background:var(--dark2); border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:12px 14px; margin-bottom:6px; display:flex; align-items:center; gap:10px; transition:all 0.2s; flex-wrap:wrap; }
+.match-card:hover { border-color:rgba(59,130,246,0.3); background:var(--dark3); }
+.match-grp { font-family:'Bebas Neue',sans-serif; font-size:16px; color:var(--blue2); width:22px; text-align:center; flex-shrink:0; }
+.match-teams { flex:1; display:flex; align-items:center; gap:8px; min-width:200px; }
+.match-team { font-size:14px; font-weight:700; }
+.vs { font-family:'Bebas Neue',sans-serif; font-size:12px; color:var(--muted); }
+.match-meta { text-align:right; flex-shrink:0; }
+.match-time { font-size:12px; font-weight:600; }
+.match-venue { font-size:10px; color:var(--muted); margin-top:2px; }
+
+/* ── TEAMS ── */
+.team-search { width:100%; background:var(--dark2); border:1px solid rgba(255,255,255,0.1); border-radius:8px; padding:11px 14px; font-size:14px; color:var(--text); margin-bottom:16px; outline:none; transition:border-color 0.2s; }
+.team-search:focus { border-color:var(--gold); }
+.team-search::placeholder { color:var(--muted); }
+.teams-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:10px; }
+.team-card { background:var(--dark2); border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:14px; text-align:center; transition:all 0.2s; cursor:pointer; }
+.team-card:hover { border-color:rgba(201,168,76,0.3); transform:translateY(-2px); }
+.tc-flag { font-size:36px; margin-bottom:6px; }
+.tc-name { font-size:13px; font-weight:700; }
+.tc-conf { font-size:9px; letter-spacing:1px; color:var(--muted); text-transform:uppercase; margin-top:3px; }
+.tc-grp { font-family:'Bebas Neue',sans-serif; font-size:18px; color:var(--blue2); }
+
+/* ── HISTORY ── */
+.history-timeline { position:relative; }
+.history-timeline::before { content:''; position:absolute; left:22px; top:0; bottom:0; width:2px; background:linear-gradient(180deg,var(--gold),transparent); }
+.history-item { display:flex; gap:16px; margin-bottom:16px; }
+.history-dot { width:46px; height:46px; background:var(--dark2); border:2px solid var(--gold); border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-family:'Bebas Neue',sans-serif; font-size:11px; color:var(--gold); text-align:center; line-height:1.2; z-index:1; }
+.history-content { background:var(--dark2); border:1px solid rgba(255,255,255,0.06); border-radius:8px; padding:12px 16px; flex:1; }
+.history-year { font-family:'Bebas Neue',sans-serif; font-size:20px; color:var(--gold); }
+.history-host { font-size:11px; color:var(--muted); margin-bottom:6px; }
+.history-row { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:6px; }
+.history-winner { font-size:15px; font-weight:700; }
+.history-score { font-family:'Bebas Neue',sans-serif; font-size:18px; color:var(--text); }
+.history-runner { font-size:12px; color:var(--muted); }
+</style>
+</head>
+<body>
+
+<!-- ═══ COUNTDOWN BAR - EN ÜSTTE ═══ -->
+<div id="countdownBar">
+  <div class="cb-label">⚽ İlk Maça Kalan Süre</div>
+  <div class="cb-units">
+    <div class="cb-box">
+      <div class="cb-num" id="cdD">--</div>
+      <div class="cb-lbl">Gün</div>
+    </div>
+    <div class="cb-sep">:</div>
+    <div class="cb-box">
+      <div class="cb-num" id="cdH">--</div>
+      <div class="cb-lbl">Saat</div>
+    </div>
+    <div class="cb-sep">:</div>
+    <div class="cb-box">
+      <div class="cb-num" id="cdM">--</div>
+      <div class="cb-lbl">Dakika</div>
+    </div>
+    <div class="cb-sep">:</div>
+    <div class="cb-box">
+      <div class="cb-num" id="cdS">--</div>
+      <div class="cb-lbl">Saniye</div>
+    </div>
+  </div>
+  <div class="cb-match">🇲🇽 Meksika – Güney Afrika 🇿🇦 &nbsp;·&nbsp; 11 Haz 2026 · 22:00 TR</div>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<div class="hero">
+  <div class="hero-badge">🏆 FIFA DÜNYA KUPASI</div>
+  <h1>DÜNYA<br>KUPASI<br>2026</h1>
+  <p class="hero-sub">11 Haziran – 19 Temmuz · ABD, Kanada, Meksika</p>
+  <div class="hero-stats">
+    <div class="stat-item"><div class="stat-num">48</div><div class="stat-lbl">Takım</div></div>
+    <div class="stat-item"><div class="stat-num">12</div><div class="stat-lbl">Grup</div></div>
+    <div class="stat-item"><div class="stat-num">104</div><div class="stat-lbl">Maç</div></div>
+    <div class="stat-item"><div class="stat-num">16</div><div class="stat-lbl">Şehir</div></div>
+  </div>
+</div>
+
+<!-- ═══ NAV ═══ -->
+<nav class="nav-tabs">
+  <div class="nav-inner">
+    <button class="tab-btn active" onclick="showTab('groups',this)">🏆 Gruplar</button>
+    <button class="tab-btn" onclick="showTab('fixture',this)">📅 Fikstür</button>
+    <button class="tab-btn" onclick="showTab('teams',this)">🌍 Takımlar</button>
+    <button class="tab-btn" onclick="showTab('history',this)">📖 Tarihçe</button>
+  </div>
+</nav>
+
+<!-- ═══ MAIN ═══ -->
+<div class="main">
+
+  <div id="groups" class="section active">
+    <div class="section-title">Grup Aşaması</div>
+    <div class="section-sub">Her gruptan ilk 2 takım + en iyi 8 üçüncü → 32'ler turu</div>
+    <div class="info-banner">ℹ️ 2026 Dünya Kupası'nda tarihte ilk kez <strong>48 takım</strong> mücadele ediyor. 12 grup, her biri 4 takım.</div>
+    <div class="groups-grid" id="groupsGrid"></div>
+  </div>
+
+  <div id="fixture" class="section">
+    <div class="section-title">Maç Takvimi</div>
+    <div class="section-sub">Grup aşaması fikstürü · Türkiye saatiyle</div>
+    <div class="fixture-filters" id="fixFilters"></div>
+    <div id="fixtureList"></div>
+  </div>
+
+  <div id="teams" class="section">
+    <div class="section-title">Katılan Takımlar</div>
+    <div class="section-sub">48 milli takım · 6 konfederasyon</div>
+    <input type="text" class="team-search" placeholder="🔍 Takım ara..." oninput="filterTeams(this.value)">
+    <div class="teams-grid" id="teamsGrid"></div>
+  </div>
+
+  <div id="history" class="section">
+    <div class="section-title">Dünya Kupası Tarihçesi</div>
+    <div class="section-sub">1930'dan bugüne tüm şampiyonlar</div>
+    <div class="history-timeline" id="historyList"></div>
+  </div>
+
+</div>
+
+<script>
+// ── COUNTDOWN ──
+function tick() {
+  var t = new Date('2026-06-11T19:00:00Z') - new Date();
+  if (t < 0) t = 0;
+  document.getElementById('cdD').textContent = Math.floor(t/86400000);
+  document.getElementById('cdH').textContent = p(Math.floor(t%86400000/3600000));
+  document.getElementById('cdM').textContent = p(Math.floor(t%3600000/60000));
+  document.getElementById('cdS').textContent = p(Math.floor(t%60000/1000));
+}
+function p(n){ return n<10?'0'+n:''+n; }
+tick(); setInterval(tick,1000);
+
+// ── DATA ──
+var GD = {
+  A:[{n:'Meksika',f:'🇲🇽',c:'CONCACAF',h:1},{n:'Güney Afrika',f:'🇿🇦',c:'CAF'},{n:'Güney Kore',f:'🇰🇷',c:'AFC'},{n:'Çekya',f:'🇨🇿',c:'UEFA'}],
+  B:[{n:'Kanada',f:'🇨🇦',c:'CONCACAF',h:1},{n:'Bosna-Hersek',f:'🇧🇦',c:'UEFA'},{n:'Katar',f:'🇶🇦',c:'AFC'},{n:'İsviçre',f:'🇨🇭',c:'UEFA'}],
+  C:[{n:'Brezilya',f:'🇧🇷',c:'CONMEBOL'},{n:'Fas',f:'🇲🇦',c:'CAF'},{n:'Haiti',f:'🇭🇹',c:'CONCACAF'},{n:'İskoçya',f:'🏴',c:'UEFA'}],
+  D:[{n:'ABD',f:'🇺🇸',c:'CONCACAF',h:1},{n:'Paraguay',f:'🇵🇾',c:'CONMEBOL'},{n:'Avustralya',f:'🇦🇺',c:'AFC'},{n:'Türkiye',f:'🇹🇷',c:'UEFA'}],
+  E:[{n:'Almanya',f:'🇩🇪',c:'UEFA'},{n:'Curaçao',f:'🇨🇼',c:'CONCACAF'},{n:'Fildişi Sahili',f:'🇨🇮',c:'CAF'},{n:'Ekvador',f:'🇪🇨',c:'CONMEBOL'}],
+  F:[{n:'Hollanda',f:'🇳🇱',c:'UEFA'},{n:'Japonya',f:'🇯🇵',c:'AFC'},{n:'İsveç',f:'🇸🇪',c:'UEFA'},{n:'Tunus',f:'🇹🇳',c:'CAF'}],
+  G:[{n:'Belçika',f:'🇧🇪',c:'UEFA'},{n:'Mısır',f:'🇪🇬',c:'CAF'},{n:'İran',f:'🇮🇷',c:'AFC'},{n:'Yeni Zelanda',f:'🇳🇿',c:'OFC'}],
+  H:[{n:'İspanya',f:'🇪🇸',c:'UEFA'},{n:'Cabo Verde',f:'🇨🇻',c:'CAF'},{n:'Suudi Arabistan',f:'🇸🇦',c:'AFC'},{n:'Uruguay',f:'🇺🇾',c:'CONMEBOL'}],
+  I:[{n:'Fransa',f:'🇫🇷',c:'UEFA'},{n:'Senegal',f:'🇸🇳',c:'CAF'},{n:'Arjantin',f:'🇦🇷',c:'CONMEBOL'},{n:'Özbekistan',f:'🇺🇿',c:'AFC'}],
+  J:[{n:'Portekiz',f:'🇵🇹',c:'UEFA'},{n:'Panama',f:'🇵🇦',c:'CONCACAF'},{n:'Kolombiya',f:'🇨🇴',c:'CONMEBOL'},{n:'İrlanda',f:'🇮🇪',c:'UEFA'}],
+  K:[{n:'İngiltere',f:'🏴',c:'UEFA'},{n:'Cezayir',f:'🇩🇿',c:'CAF'},{n:'Nijerya',f:'🇳🇬',c:'CAF'},{n:'Norveç',f:'🇳🇴',c:'UEFA'}],
+  L:[{n:'Hırvatistan',f:'🇭🇷',c:'UEFA'},{n:'Gana',f:'🇬🇭',c:'CAF'},{n:'Polonya',f:'🇵🇱',c:'UEFA'},{n:'Ürdün',f:'🇯🇴',c:'AFC'}]
+};
+var FX = [
+  {d:'11 Haz (Perş)',g:'A',h:'🇲🇽 Meksika',a:'Güney Afrika 🇿🇦',t:'22:00',v:'Estadio Azteca'},
+  {d:'11 Haz (Perş)',g:'A',h:'🇰🇷 Güney Kore',a:'Çekya 🇨🇿',t:'05:00',v:'Estadio Akron'},
+  {d:'12 Haz (Cum)',g:'B',h:'🇨🇦 Kanada',a:'Bosna-Hersek 🇧🇦',t:'22:00',v:'BMO Field, Toronto'},
+  {d:'12 Haz (Cum)',g:'D',h:'🇺🇸 ABD',a:'Paraguay 🇵🇾',t:'03:00',v:'SoFi Stadium'},
+  {d:'13 Haz (Cmt)',g:'B',h:'🇶🇦 Katar',a:'İsviçre 🇨🇭',t:'22:00',v:"Levi's Stadium"},
+  {d:'13 Haz (Cmt)',g:'C',h:'🇧🇷 Brezilya',a:'Fas 🇲🇦',t:'00:00',v:'MetLife Stadium'},
+  {d:'13 Haz (Cmt)',g:'C',h:'🇭🇹 Haiti',a:'İskoçya',t:'03:00',v:'Gillette Stadium'},
+  {d:'13 Haz (Cmt)',g:'D',h:'🇦🇺 Avustralya',a:'Türkiye 🇹🇷',t:'07:00',v:'BC Place, Vancouver'},
+  {d:'14 Haz (Paz)',g:'E',h:'🇩🇪 Almanya',a:'Curaçao 🇨🇼',t:'22:00',v:'NRG Stadium, Houston'},
+  {d:'14 Haz (Paz)',g:'F',h:'🇳🇱 Hollanda',a:'Japonya 🇯🇵',t:'01:00',v:"AT&T Stadium"},
+  {d:'14 Haz (Paz)',g:'E',h:'🇨🇮 Fildişi Sahili',a:'Ekvador 🇪🇨',t:'04:00',v:'Lincoln Financial Field'},
+  {d:'14 Haz (Paz)',g:'F',h:'🇸🇪 İsveç',a:'Tunus 🇹🇳',t:'07:00',v:'Estadio BBVA'},
+  {d:'15 Haz (Pzt)',g:'H',h:'🇪🇸 İspanya',a:'Cabo Verde 🇨🇻',t:'19:00',v:'Mercedes-Benz Stadium'},
+  {d:'15 Haz (Pzt)',g:'G',h:'🇧🇪 Belçika',a:'Mısır 🇪🇬',t:'22:00',v:'Lumen Field, Seattle'},
+  {d:'15 Haz (Pzt)',g:'H',h:'🇸🇦 Suudi Arabistan',a:'Uruguay 🇺🇾',t:'01:00',v:'Hard Rock Stadium'},
+  {d:'15 Haz (Pzt)',g:'G',h:'🇮🇷 İran',a:'Yeni Zelanda 🇳🇿',t:'06:00',v:'SoFi Stadium'},
+  {d:'18 Haz (Perş)',g:'A',h:'🇨🇿 Çekya',a:'Güney Afrika 🇿🇦',t:'19:00',v:'Mercedes-Benz Stadium'},
+  {d:'18 Haz (Perş)',g:'B',h:'🇨🇭 İsviçre',a:'Bosna-Hersek 🇧🇦',t:'22:00',v:'SoFi Stadium'},
+  {d:'18 Haz (Perş)',g:'B',h:'🇨🇦 Kanada',a:'Katar 🇶🇦',t:'01:00',v:'BC Place, Vancouver'},
+  {d:'18 Haz (Perş)',g:'A',h:'🇲🇽 Meksika',a:'Güney Kore 🇰🇷',t:'04:00',v:'Estadio Akron'},
+  {d:'19 Haz (Cum)',g:'D',h:'🇺🇸 ABD',a:'Avustralya 🇦🇺',t:'22:00',v:'Lumen Field, Seattle'},
+  {d:'19 Haz (Cum)',g:'C',h:'🇧🇷 Brezilya',a:'Haiti 🇭🇹',t:'02:00',v:'Lincoln Financial Field'},
+  {d:'24 Haz (Çrş)',g:'A',h:'🇨🇿 Çekya',a:'Meksika 🇲🇽',t:'02:00',v:'Estadio Azteca'},
+  {d:'24 Haz (Çrş)',g:'B',h:'🇨🇭 İsviçre',a:'Kanada 🇨🇦',t:'22:00',v:'BC Place, Vancouver'},
+  {d:'24 Haz (Çrş)',g:'C',h:'İskoçya',a:'Brezilya 🇧🇷',t:'01:00',v:'Hard Rock Stadium'},
+  {d:'25 Haz (Perş)',g:'D',h:'🇹🇷 Türkiye',a:'ABD 🇺🇸',t:'04:00',v:'SoFi Stadium'},
+  {d:'25 Haz (Perş)',g:'E',h:'🇩🇪 Almanya',a:'Ekvador 🇪🇨',t:'01:00',v:'MetLife Stadium'},
+  {d:'26 Haz (Cum)',g:'G',h:'🇳🇿 Yeni Zelanda',a:'Belçika 🇧🇪',t:'05:00',v:'BC Place, Vancouver'},
+  {d:'26 Haz (Cum)',g:'H',h:'🇺🇾 Uruguay',a:'İspanya 🇪🇸',t:'02:00',v:'Estadio Akron'}
+];
+var TEAMS = [
+  {n:'Arjantin',f:'🇦🇷',c:'CONMEBOL',g:'I',ch:'2022'},{n:'Fransa',f:'🇫🇷',c:'UEFA',g:'I',ch:'2018'},
+  {n:'Almanya',f:'🇩🇪',c:'UEFA',g:'E'},{n:'İspanya',f:'🇪🇸',c:'UEFA',g:'H',ch:'2010'},
+  {n:'Brezilya',f:'🇧🇷',c:'CONMEBOL',g:'C'},{n:'İngiltere',f:'🏴',c:'UEFA',g:'K'},
+  {n:'Portekiz',f:'🇵🇹',c:'UEFA',g:'J'},{n:'Hollanda',f:'🇳🇱',c:'UEFA',g:'F'},
+  {n:'Türkiye',f:'🇹🇷',c:'UEFA',g:'D'},{n:'ABD',f:'🇺🇸',c:'CONCACAF',g:'D',ho:1},
+  {n:'Meksika',f:'🇲🇽',c:'CONCACAF',g:'A',ho:1},{n:'Kanada',f:'🇨🇦',c:'CONCACAF',g:'B',ho:1},
+  {n:'Japonya',f:'🇯🇵',c:'AFC',g:'F'},{n:'Fas',f:'🇲🇦',c:'CAF',g:'C'},
+  {n:'Senegal',f:'🇸🇳',c:'CAF',g:'I'},{n:'Uruguay',f:'🇺🇾',c:'CONMEBOL',g:'H'},
+  {n:'Kolombiya',f:'🇨🇴',c:'CONMEBOL',g:'J'},{n:'İsviçre',f:'🇨🇭',c:'UEFA',g:'B'},
+  {n:'Belçika',f:'🇧🇪',c:'UEFA',g:'G'},{n:'Avustralya',f:'🇦🇺',c:'AFC',g:'D'},
+  {n:'Katar',f:'🇶🇦',c:'AFC',g:'B'},{n:'Güney Kore',f:'🇰🇷',c:'AFC',g:'A'},
+  {n:'Hırvatistan',f:'🇭🇷',c:'UEFA',g:'L'},{n:'Paraguay',f:'🇵🇾',c:'CONMEBOL',g:'D'},
+  {n:'Fildişi Sahili',f:'🇨🇮',c:'CAF',g:'E'},{n:'Ekvador',f:'🇪🇨',c:'CONMEBOL',g:'E'},
+  {n:'Norveç',f:'🇳🇴',c:'UEFA',g:'K'},{n:'İsveç',f:'🇸🇪',c:'UEFA',g:'F'},
+  {n:'Bosna-Hersek',f:'🇧🇦',c:'UEFA',g:'B'},{n:'İskoçya',f:'🏴',c:'UEFA',g:'C'},
+  {n:'Güney Afrika',f:'🇿🇦',c:'CAF',g:'A'},{n:'İran',f:'🇮🇷',c:'AFC',g:'G'},
+  {n:'Çekya',f:'🇨🇿',c:'UEFA',g:'A'},{n:'Mısır',f:'🇪🇬',c:'CAF',g:'G'},
+  {n:'Cezayir',f:'🇩🇿',c:'CAF',g:'K'},{n:'Gana',f:'🇬🇭',c:'CAF',g:'L'},
+  {n:'Panama',f:'🇵🇦',c:'CONCACAF',g:'J'},{n:'Haiti',f:'🇭🇹',c:'CONCACAF',g:'C'},
+  {n:'Suudi Arabistan',f:'🇸🇦',c:'AFC',g:'H'},{n:'Özbekistan',f:'🇺🇿',c:'AFC',g:'I'},
+  {n:'Yeni Zelanda',f:'🇳🇿',c:'OFC',g:'G'},{n:'Curaçao',f:'🇨🇼',c:'CONCACAF',g:'E'},
+  {n:'Cabo Verde',f:'🇨🇻',c:'CAF',g:'H'},{n:'Tunus',f:'🇹🇳',c:'CAF',g:'F'},
+  {n:'Polonya',f:'🇵🇱',c:'UEFA',g:'L'},{n:'Ürdün',f:'🇯🇴',c:'AFC',g:'L'},
+  {n:'Nijerya',f:'🇳🇬',c:'CAF',g:'K'},{n:'İrlanda',f:'🇮🇪',c:'UEFA',g:'J'}
+];
+var HIST = [
+  {y:2022,ho:'Katar',w:'🇦🇷 Arjantin',r:'Fransa',s:'3-3 (4-2 pen)'},
+  {y:2018,ho:'Rusya',w:'🇫🇷 Fransa',r:'Hırvatistan',s:'4-2'},
+  {y:2014,ho:'Brezilya',w:'🇩🇪 Almanya',r:'Arjantin',s:'1-0'},
+  {y:2010,ho:'G.Afrika',w:'🇪🇸 İspanya',r:'Hollanda',s:'1-0'},
+  {y:2006,ho:'Almanya',w:'🇮🇹 İtalya',r:'Fransa',s:'1-1 (5-3 pen)'},
+  {y:2002,ho:'G.Kore/Japonya',w:'🇧🇷 Brezilya',r:'Almanya',s:'2-0'},
+  {y:1998,ho:'Fransa',w:'🇫🇷 Fransa',r:'Brezilya',s:'3-0'},
+  {y:1994,ho:'ABD',w:'🇧🇷 Brezilya',r:'İtalya',s:'0-0 (3-2 pen)'},
+  {y:1990,ho:'İtalya',w:'🇩🇪 B.Almanya',r:'Arjantin',s:'1-0'},
+  {y:1986,ho:'Meksika',w:'🇦🇷 Arjantin',r:'B.Almanya',s:'3-2'},
+  {y:1982,ho:'İspanya',w:'🇮🇹 İtalya',r:'B.Almanya',s:'3-1'},
+  {y:1978,ho:'Arjantin',w:'🇦🇷 Arjantin',r:'Hollanda',s:'3-1'},
+  {y:1974,ho:'B.Almanya',w:'🇩🇪 B.Almanya',r:'Hollanda',s:'2-1'},
+  {y:1970,ho:'Meksika',w:'🇧🇷 Brezilya',r:'İtalya',s:'4-1'},
+  {y:1966,ho:'İngiltere',w:'İngiltere',r:'B.Almanya',s:'4-2'},
+  {y:1962,ho:'Şili',w:'🇧🇷 Brezilya',r:'Çekoslavakya',s:'3-1'},
+  {y:1958,ho:'İsveç',w:'🇧🇷 Brezilya',r:'İsveç',s:'5-2'},
+  {y:1954,ho:'İsviçre',w:'🇩🇪 B.Almanya',r:'Macaristan',s:'3-2'},
+  {y:1950,ho:'Brezilya',w:'🇺🇾 Uruguay',r:'Brezilya',s:'2-1'},
+  {y:1938,ho:'Fransa',w:'🇮🇹 İtalya',r:'Macaristan',s:'4-2'},
+  {y:1934,ho:'İtalya',w:'🇮🇹 İtalya',r:'Çekoslavakya',s:'2-1'},
+  {y:1930,ho:'Uruguay',w:'🇺🇾 Uruguay',r:'Arjantin',s:'4-2'}
+];
+
+// ── RENDER ──
+function renderGroups() {
+  var h=''; var K=['A','B','C','D','E','F','G','H','I','J','K','L'];
+  K.forEach(function(k){
+    var ts=GD[k]; var tr='';
+    ts.forEach(function(t){ tr+='<div class="team-row"><span class="team-flag">'+t.f+'</span><span class="team-name">'+t.n+'</span>'+(t.h?'<span class="host-tag">EV SAHİBİ</span>':'<span class="team-conf">'+t.c+'</span>')+'</div>'; });
+    h+='<div class="group-card"><div class="group-header"><div class="group-letter">'+k+'</div><div class="group-title">Grup '+k+'</div></div>'+tr+'</div>';
+  });
+  document.getElementById('groupsGrid').innerHTML=h;
+}
+
+function renderFixtureFilters() {
+  var h='<button class="filter-btn active" onclick="ffix(\'all\',this)">Tümü</button>';
+  ['A','B','C','D','E','F','G','H','I','J','K','L'].forEach(function(k){ h+='<button class="filter-btn" onclick="ffix(\''+k+'\',this)">Grup '+k+'</button>'; });
+  document.getElementById('fixFilters').innerHTML=h;
+}
+
+function renderFixtures(f) {
+  var list=f==='all'?FX:FX.filter(function(x){return x.g===f;});
+  var bd={}; var ord=[];
+  list.forEach(function(x){ if(!bd[x.d]){bd[x.d]=[];ord.push(x.d);}bd[x.d].push(x); });
+  var h='';
+  ord.forEach(function(d){
+    h+='<div class="fixture-day"><div class="day-label">'+d+'</div>';
+    bd[d].forEach(function(m){ h+='<div class="match-card"><span class="match-grp">'+m.g+'</span><div class="match-teams"><span class="match-team">'+m.h+'</span><span class="vs">VS</span><span class="match-team">'+m.a+'</span></div><div class="match-meta"><div class="match-time">'+m.t+' TR</div><div class="match-venue">'+m.v+'</div></div></div>'; });
+    h+='</div>';
+  });
+  document.getElementById('fixtureList').innerHTML=h||'<p style="color:var(--muted);text-align:center;padding:30px">Maç bulunamadı</p>';
+}
+
+function ffix(g,btn){ document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active');}); btn.classList.add('active'); renderFixtures(g); }
+
+function renderTeams(s) {
+  var list=s?TEAMS.filter(function(t){return t.n.toLowerCase().indexOf(s.toLowerCase())>-1;}):TEAMS;
+  var h=list.map(function(t){ return '<div class="team-card"><div class="tc-flag">'+t.f+'</div><div class="tc-name">'+t.n+'</div><div class="tc-conf">'+t.c+'</div><div class="tc-grp">Grup '+t.g+'</div>'+(t.ho?'<div style="color:var(--gold);font-size:10px;margin-top:3px">🏟️ Ev Sahibi</div>':'')+(t.ch?'<div style="color:var(--gold2);font-size:10px;margin-top:2px">🏆 '+t.ch+'</div>':'')+'</div>'; }).join('');
+  document.getElementById('teamsGrid').innerHTML=h||'<p style="color:var(--muted);grid-column:1/-1;text-align:center;padding:30px">Bulunamadı</p>';
+}
+function filterTeams(v){ renderTeams(v); }
+
+function renderHistory() {
+  var h=HIST.map(function(x){ return '<div class="history-item"><div class="history-dot">'+x.y+'</div><div class="history-content"><div class="history-year">'+x.y+'</div><div class="history-host">📍 '+x.ho+'</div><div class="history-row"><div><div style="font-size:10px;color:var(--gold);letter-spacing:1px;margin-bottom:3px">🏆 ŞAMPİYON</div><div class="history-winner">'+x.w+'</div><div class="history-runner">Finalist: '+x.r+'</div></div><div class="history-score">'+x.s+'</div></div></div></div>'; }).join('');
+  document.getElementById('historyList').innerHTML=h;
+}
+
+function showTab(id,btn) {
+  document.querySelectorAll('.section').forEach(function(s){s.classList.remove('active');});
+  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active');});
+  document.getElementById(id).classList.add('active'); btn.classList.add('active');
+}
+
+renderGroups(); renderFixtureFilters(); renderFixtures('all'); renderTeams(); renderHistory();
+</script>
+</body>
+</html>
