@@ -13,7 +13,7 @@
 <link rel="apple-touch-icon" href="https://upload.wikimedia.org/wikipedia/en/thumb/9/94/FIFA_World_Cup_2026_emblem.svg/200px-FIFA_World_Cup_2026_emblem.svg.png">
 <title>Dünya Kupası 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;600;700&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="manifest" href="data:application/json,{%22name%22:%22D%C3%BCnya%20Kupas%C4%B1%202026%22,%22short_name%22:%22DK2026%22,%22start_url%22:%22/%22,%22display%22:%22standalone%22,%22background_color%22:%22%230A0E1A%22,%22theme_color%22:%22%230A0E1A%22,%22icons%22:[{%22src%22:%22https://upload.wikimedia.org/wikipedia/en/thumb/9/94/FIFA_World_Cup_2026_emblem.svg/192px-FIFA_World_Cup_2026_emblem.svg.png%22,%22sizes%22:%22192x192%22,%22type%22:%22image/png%22}]}">
+<link rel="manifest" href="data:application/manifest+json,{%22name%22:%22D%C3%BCnya%20Kupas%C4%B1%202026%22,%22short_name%22:%22DK2026%22,%22description%22:%22FIFA%20D%C3%BCnya%20Kupas%C4%B1%202026%22,%22start_url%22:%22/%22,%22display%22:%22standalone%22,%22background_color%22:%22%230A0E1A%22,%22theme_color%22:%22%23C9A84C%22,%22orientation%22:%22portrait%22,%22icons%22:[{%22src%22:%22https://img.icons8.com/color/192/football2.png%22,%22sizes%22:%22192x192%22,%22type%22:%22image/png%22,%22purpose%22:%22any%20maskable%22},{%22src%22:%22https://img.icons8.com/color/512/football2.png%22,%22sizes%22:%22512x512%22,%22type%22:%22image/png%22,%22purpose%22:%22any%20maskable%22}]}">
 <style>
 :root {
   --gold: #C9A84C;
@@ -641,6 +641,70 @@ function renderScores(matches, mode) {
 }
 
 renderGroups(); renderFixtureFilters(); renderFixtures('all'); renderTeams(); renderHistory();
+
+// ── SERVICE WORKER ──
+if('serviceWorker' in navigator) {
+  var swCode = `
+    var CACHE = 'dk2026-v1';
+    self.addEventListener('install', function(e) {
+      self.skipWaiting();
+    });
+    self.addEventListener('activate', function(e) {
+      self.clients.claim();
+    });
+    self.addEventListener('fetch', function(e) {
+      if(e.request.method !== 'GET') return;
+      e.respondWith(
+        fetch(e.request).catch(function() {
+          return caches.match(e.request);
+        })
+      );
+    });
+  `;
+  var blob = new Blob([swCode], {type:'application/javascript'});
+  var swUrl = URL.createObjectURL(blob);
+  navigator.serviceWorker.register(swUrl).catch(function(){});
+}
+
+// ── PWA INSTALL PROMPT ──
+var deferredPrompt;
+window.addEventListener('beforeinstallprompt', function(e) {
+  e.preventDefault();
+  deferredPrompt = e;
+  var banner = document.getElementById('installBanner');
+  if(banner) banner.style.display = 'flex';
+});
+document.addEventListener('DOMContentLoaded', function() {
+  var btn = document.getElementById('installBtn');
+  if(btn) {
+    btn.addEventListener('click', function() {
+      if(deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(function() {
+          deferredPrompt = null;
+          document.getElementById('installBanner').style.display = 'none';
+        });
+      }
+    });
+  }
+  var closeBtn = document.getElementById('installClose');
+  if(closeBtn) {
+    closeBtn.addEventListener('click', function() {
+      document.getElementById('installBanner').style.display = 'none';
+    });
+  }
+});
 </script>
+
+<!-- PWA INSTALL BANNER -->
+<div id="installBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;background:linear-gradient(135deg,#1a2235,#111827);border-top:2px solid #C9A84C;padding:14px 20px;z-index:999;align-items:center;gap:12px;flex-wrap:wrap;">
+  <span style="font-size:28px;">⚽</span>
+  <div style="flex:1;">
+    <div style="font-weight:700;font-size:14px;color:#fff;">Uygulamayı Yükle</div>
+    <div style="font-size:12px;color:#94A3B8;">Ana ekrana ekle, uygulama gibi kullan!</div>
+  </div>
+  <button id="installBtn" style="background:linear-gradient(135deg,#C9A84C,#E8C96A);color:#000;border:none;padding:10px 20px;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer;">Yükle</button>
+  <button id="installClose" style="background:none;border:none;color:#94A3B8;font-size:20px;cursor:pointer;padding:4px;">✕</button>
+</div>
 </body>
 </html>
