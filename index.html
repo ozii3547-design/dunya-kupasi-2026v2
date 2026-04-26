@@ -346,43 +346,39 @@ body { font-family:'Barlow',sans-serif; background:var(--dark); color:var(--text
   </div>
 
   <div id="fixture" class="section">
-    <div class="section-title">Maç Takvimi</div>
-    <div class="section-sub">Fikstür ve canlı skorlar</div>
+    <div class="section-title">Mac Takvimi</div>
+    <div class="section-sub">Fikstur ve canli skorlar</div>
 
-    <!-- Ana sekmeler -->
-    <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
-      <button class="filter-btn active" id="btnSchedule" onclick="switchFixture('schedule',this)">📅 Fikstür Takvimi</button>
-      <button class="filter-btn" id="btnLive" onclick="switchFixture('live',this)">🔴 Canlı & Güncel</button>
+    <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:16px;">
+      <button id="btnSchedule" style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:8px 18px;border:2px solid var(--gold);border-radius:6px;background:var(--gold);color:#000;cursor:pointer;" onclick="switchFixture('schedule',this)">FIKSTUR TAKVIMI</button>
+      <button id="btnLive" style="font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:8px 18px;border:2px solid rgba(255,255,255,0.2);border-radius:6px;background:none;color:var(--muted);cursor:pointer;" onclick="switchFixture('live',this)">CANLI &amp; GUNCEL</button>
     </div>
 
-    <!-- Fikstür takvimi -->
     <div id="scheduleView">
       <div class="fixture-filters" id="fixFilters"></div>
       <div id="fixtureList"></div>
     </div>
 
-    <!-- Canlı & Güncel -->
     <div id="liveView" style="display:none;">
-      <!-- Lig filtreleri -->
-      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;">
-        <button class="filter-btn" onclick="switchLeague('live','all',this)">🔴 Canlı</button>
-        <button class="filter-btn active" onclick="switchLeague('today','all',this)">📆 Bugün</button>
-        <button class="filter-btn" onclick="switchLeague('last','all',this)">⏮ Dün</button>
-        <button class="filter-btn" onclick="switchLeague('tomorrow','all',this)">⏭ Yarın</button>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;">
+        <button class="filter-btn" onclick="switchLeague('live','all',this)">CANLI</button>
+        <button class="filter-btn active" onclick="switchLeague('today','all',this)">BUGUN</button>
+        <button class="filter-btn" onclick="switchLeague('last','all',this)">DUN</button>
+        <button class="filter-btn" onclick="switchLeague('tomorrow','all',this)">YARIN</button>
       </div>
       <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;">
-        <button class="filter-btn" onclick="switchLeague('today','39',this)">🏴󠁧󠁢󠁥󠁮󠁧󠁿 Premier League</button>
-        <button class="filter-btn" onclick="switchLeague('today','140',this)">🇪🇸 La Liga</button>
-        <button class="filter-btn" onclick="switchLeague('today','78',this)">🇩🇪 Bundesliga</button>
-        <button class="filter-btn" onclick="switchLeague('today','135',this)">🇮🇹 Serie A</button>
-        <button class="filter-btn" onclick="switchLeague('today','61',this)">🇫🇷 Ligue 1</button>
-        <button class="filter-btn" onclick="switchLeague('today','203',this)">🇹🇷 Süper Lig</button>
-        <button class="filter-btn" onclick="switchLeague('today','204',this)">🇹🇷 1. Lig</button>
+        <button class="filter-btn" onclick="switchLeague('today','39',this)">Premier League</button>
+        <button class="filter-btn" onclick="switchLeague('today','140',this)">La Liga</button>
+        <button class="filter-btn" onclick="switchLeague('today','78',this)">Bundesliga</button>
+        <button class="filter-btn" onclick="switchLeague('today','135',this)">Serie A</button>
+        <button class="filter-btn" onclick="switchLeague('today','61',this)">Ligue 1</button>
+        <button class="filter-btn" onclick="switchLeague('today','203',this)">Super Lig</button>
+        <button class="filter-btn" onclick="switchLeague('today','204',this)">1. Lig</button>
       </div>
       <div id="scoresContent">
         <div style="text-align:center;padding:40px;color:var(--muted);">
-          <div style="font-size:40px;margin-bottom:12px;">⚽</div>
-          <div>Bir seçenek seçin</div>
+          <div style="font-size:40px;margin-bottom:12px;">&#9917;</div>
+          <div>Yukleniyor...</div>
         </div>
       </div>
     </div>
@@ -564,17 +560,18 @@ function showTab(id,btn) {
 }
 
 function switchFixture(mode, btn) {
-  document.getElementById('btnSchedule').classList.remove('active');
-  document.getElementById('btnLive').classList.remove('active');
-  if(btn) btn.classList.add('active');
-  var schedView = document.getElementById('scheduleView');
-  var liveView = document.getElementById('liveView');
+  var bs = document.getElementById('btnSchedule');
+  var bl = document.getElementById('btnLive');
   if(mode === 'schedule') {
-    schedView.style.display = 'block';
-    liveView.style.display = 'none';
+    bs.style.background = 'var(--gold)'; bs.style.color = '#000'; bs.style.borderColor = 'var(--gold)';
+    bl.style.background = 'none'; bl.style.color = 'var(--muted)'; bl.style.borderColor = 'rgba(255,255,255,0.2)';
+    document.getElementById('scheduleView').style.display = 'block';
+    document.getElementById('liveView').style.display = 'none';
   } else {
-    schedView.style.display = 'none';
-    liveView.style.display = 'block';
+    bl.style.background = 'var(--gold)'; bl.style.color = '#000'; bl.style.borderColor = 'var(--gold)';
+    bs.style.background = 'none'; bs.style.color = 'var(--muted)'; bs.style.borderColor = 'rgba(255,255,255,0.2)';
+    document.getElementById('scheduleView').style.display = 'none';
+    document.getElementById('liveView').style.display = 'block';
     var allBtns = document.querySelectorAll('#liveView > div:first-child .filter-btn');
     var todayBtn = allBtns[1] || allBtns[0];
     switchLeague('today', 'all', todayBtn);
