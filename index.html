@@ -543,7 +543,7 @@ function renderFixtures(f) {
   document.getElementById('fixtureList').innerHTML=h||'<p style="color:var(--muted);text-align:center;padding:30px">Maç bulunamadı</p>';
 }
 
-function ffix(g,btn){ document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active');}); btn.classList.add('active'); renderFixtures(g); }
+function ffix(g,btn){ document.querySelectorAll('#fixFilters .filter-btn').forEach(function(b){b.classList.remove('active');}); btn.classList.add('active'); renderFixtures(g); }
 
 function renderTeams(s) {
   var list=s?TEAMS.filter(function(t){return t.n.toLowerCase().indexOf(s.toLowerCase())>-1;}):TEAMS;
@@ -575,8 +575,8 @@ function switchFixture(mode, btn) {
   } else {
     schedView.style.display = 'none';
     liveView.style.display = 'block';
-    // Otomatik olarak bugünün maçlarını yükle
-    var todayBtn = document.querySelector('#liveView .filter-btn:nth-child(2)');
+    var allBtns = document.querySelectorAll('#liveView > div:first-child .filter-btn');
+    var todayBtn = allBtns[1] || allBtns[0];
     switchLeague('today', 'all', todayBtn);
   }
 }
